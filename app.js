@@ -24,10 +24,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let ipfsAdd = ipfs.create({host:"ipfs.infura.io", port:"5001"});
 // Deploy Smart Contract and place smart contract address here
-var ContractAddress = "0x4eA29520Da6Db5A47a253CCB5C92bC7853a9bAE7";
+var ContractAddress = "0x2736A4e2E9626EbE7CEf72f7D209cA7eC72AC774";
 
 app.get("/", function (req, res) {
   res.render("index");
+});
+
+app.get("/institution", function (req, res) {
+  res.render("institution");
 });
 
 app.get("/AddUser", function (req, res) {
