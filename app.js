@@ -22,9 +22,9 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let ipfsAdd = ipfs.create();
+let ipfsAdd = ipfs.create({host:"ipfs.infura.io", port:"5001"});
 // Deploy Smart Contract and place smart contract address here
-var ContractAddress = "0xbb954a2398a9c3c5E0ADFcb9AcfDcCeD58bA08c6";
+var ContractAddress = "0x4eA29520Da6Db5A47a253CCB5C92bC7853a9bAE7";
 
 app.get("/", function (req, res) {
   res.render("index");

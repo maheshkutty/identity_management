@@ -19,7 +19,7 @@ contract IdentityManagement
 		string DL_No;
 		string DL_Name;
 		string DL_DOB;
-		bytes DL_Hash;
+		string DL_Hash;
 		string DL_Address;
     }
 
@@ -51,7 +51,7 @@ contract IdentityManagement
         UserMap[UserAddress].push(UserInfo(FullName,EmailID,MobileNo));
     }
 
-    function AddUserDL(address UserAddress,string memory DL_No, string memory DL_Name, string memory DL_DOB, bytes memory DL_Hash, string memory DL_Address) public
+    function AddUserDL(address UserAddress,string memory DL_No, string memory DL_Name, string memory DL_DOB, string memory DL_Hash, string memory DL_Address) public
     {
         UserDLMap[UserAddress].push(UserDL(DL_No, DL_Name, DL_DOB, DL_Hash, DL_Address));
     }
@@ -94,10 +94,16 @@ contract IdentityManagement
         return (ThisUser.FullName, ThisUser.EmailID, ThisUser.MobileNo);
     }
 
-    function viewUserDL(address UserAddress, uint RequestIndex) public view returns(uint DL_No_S, string memory DL_No_V, uint DL_Name_S, string memory DL_Name_V, uint DL_DOB_S, string memory DL_DOB_V, uint DL_Hash_S, bytes memory DL_Hash_V, uint DL_Address_S, string memory DL_Address_V)
+    function viewUserDL(address UserAddress, uint RequestIndex) public view returns(uint DL_No_S, string memory DL_No_V, uint DL_Name_S, string memory DL_Name_V, uint DL_DOB_S, string memory DL_DOB_V, uint DL_Hash_S, string memory DL_Hash_V, uint DL_Address_S, string memory DL_Address_V)
     {
         UserDL memory ThisUserDL=UserDLMap[UserAddress][0];
 		DLRequest memory ThisDLRequest=DLRequestMap[UserAddress][RequestIndex];
         return (ThisDLRequest.DL_No, ThisUserDL.DL_No, ThisDLRequest.DL_Name, ThisUserDL.DL_Name, ThisDLRequest.DL_DOB, ThisUserDL.DL_DOB, ThisDLRequest.DL_Hash, ThisUserDL.DL_Hash, ThisDLRequest.DL_Address, ThisUserDL.DL_Address);
+    }
+
+    function viewUserDL1(address UserAddress) public view returns(string memory)
+    {
+        UserDL memory ThisUserDL=UserDLMap[UserAddress][0];
+        return (ThisUserDL.DL_Hash);
     }
 }

@@ -17,7 +17,6 @@
       href="../public/css/sweet-alert.css"
       type="text/css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
       var UserAddress = "";
       var DL_Hash = "";
@@ -70,11 +69,12 @@
         var DL_DOB = document.getElementById("txtDOB").value;
         var DL_Address = document.getElementById("txtAddress").value;
         console.log(MyContract);
+        console.log(DL_Hash);
         MyContract.methods
           .AddUserDL(UserAddress, DL_No, DL_Name, DL_DOB, DL_Hash, DL_Address)
           .send({ from: account })
           .then(function (tx) {
-            location.href = "/Message?TransHash=" + tx;
+            location.href = "/Message?TransHash=" + tx.transactionHash;
             console.log("Transaction: ", tx);
           });
         // MyContract.AddUserDL.sendTransaction(
@@ -95,26 +95,27 @@
       }
 
       function getDLHash() {
-        // const reader = new FileReader();
-        // const invoicefile = document.getElementById("invoicefile");
-        // reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
+        const reader = new FileReader();
+        const invoicefile = document.getElementById("invoicefile");
+        reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
 
-        // reader.onloadend = async function () {
-        //   const ipfs = window.IpfsHttpClient.create({
-        //     host: "ipfs.infura.io",
-        //     port: "5001",
-        //   });
-        //   console.log(ipfs);
-        //   const buf = buffer.Buffer(reader.result); // Convert data into buffer
-        //   const res = await ipfs.add({
-        //     fileName: invoicefile.files[0].fileName,
-        //     content: buf,
-        //   });
-        //   console.log(res);
-        //   DL_Hash = res.path;
-        //   AddUserDL();
-        // };
-        AddUserDL();
+        reader.onloadend = async function () {
+          const ipfs = window.IpfsHttpClient.create({
+            host: "ipfs.infura.io",
+            port: "5001",
+          });
+          console.log(ipfs);
+          const buf = buffer.Buffer(reader.result); // Convert data into buffer
+          const res = await ipfs.add({
+            fileName: invoicefile.files[0].fileName,
+            content: buf,
+          });
+          console.log(res);
+          DL_Hash = res.path;
+          console.log(DL_Hash);
+          AddUserDL();
+        };
+        //AddUserDL();
       }
     </script>
   </head>
@@ -239,13 +240,6 @@
         name="hdnContractABI"
         value='[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"string","name":"RequestedBy","type":"string"},{"internalType":"uint256","name":"DL_No","type":"uint256"},{"internalType":"uint256","name":"DL_Name","type":"uint256"},{"internalType":"uint256","name":"DL_DOB","type":"uint256"},{"internalType":"uint256","name":"DL_Hash","type":"uint256"},{"internalType":"uint256","name":"DL_Address","type":"uint256"},{"internalType":"uint256","name":"DL_OverAll_Status","type":"uint256"}],"name":"AddDLRequest","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"string","name":"FullName","type":"string"},{"internalType":"string","name":"EmailID","type":"string"},{"internalType":"uint256","name":"MobileNo","type":"uint256"}],"name":"AddUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"string","name":"DL_No","type":"string"},{"internalType":"string","name":"DL_Name","type":"string"},{"internalType":"string","name":"DL_DOB","type":"string"},{"internalType":"string","name":"DL_Hash","type":"string"},{"internalType":"string","name":"DL_Address","type":"string"}],"name":"AddUserDL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"uint256","name":"RequestIndex","type":"uint256"},{"internalType":"uint256","name":"DL_No","type":"uint256"},{"internalType":"uint256","name":"DL_Name","type":"uint256"},{"internalType":"uint256","name":"DL_DOB","type":"uint256"},{"internalType":"uint256","name":"DL_Hash","type":"uint256"},{"internalType":"uint256","name":"DL_Address","type":"uint256"},{"internalType":"uint256","name":"DL_OverAll_Status","type":"uint256"}],"name":"UpdateRequestStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"uint256","name":"RequestIndex","type":"uint256"}],"name":"ViewDLRequestDetail","outputs":[{"internalType":"string","name":"RequestedBy","type":"string"},{"internalType":"uint256","name":"DL_No","type":"uint256"},{"internalType":"uint256","name":"DL_Name","type":"uint256"},{"internalType":"uint256","name":"DL_DOB","type":"uint256"},{"internalType":"uint256","name":"DL_Hash","type":"uint256"},{"internalType":"uint256","name":"DL_Address","type":"uint256"},{"internalType":"uint256","name":"DL_OverAll_Status","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"uint256","name":"RequestIndex","type":"uint256"}],"name":"ViewDLRequestHeader","outputs":[{"internalType":"string","name":"RequestedBy","type":"string"},{"internalType":"uint256","name":"DL_OverAll_Status","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"}],"name":"ViewDLRequestLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"uint256","name":"UserIndex","type":"uint256"}],"name":"viewUser","outputs":[{"internalType":"string","name":"FullName","type":"string"},{"internalType":"string","name":"EmailID","type":"string"},{"internalType":"uint256","name":"MobileNo","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"UserAddress","type":"address"},{"internalType":"uint256","name":"RequestIndex","type":"uint256"}],"name":"viewUserDL","outputs":[{"internalType":"uint256","name":"DL_No_S","type":"uint256"},{"internalType":"string","name":"DL_No_V","type":"string"},{"internalType":"uint256","name":"DL_Name_S","type":"uint256"},{"internalType":"string","name":"DL_Name_V","type":"string"},{"internalType":"uint256","name":"DL_DOB_S","type":"uint256"},{"internalType":"string","name":"DL_DOB_V","type":"string"},{"internalType":"uint256","name":"DL_Hash_S","type":"uint256"},{"internalType":"string","name":"DL_Hash_V","type":"string"},{"internalType":"uint256","name":"DL_Address_S","type":"uint256"},{"internalType":"string","name":"DL_Address_V","type":"string"}],"stateMutability":"view","type":"function"}]'
       />
-
-      <input
-        type="hidden"
-        id="hdnContractABI"
-        name="hdnContractABI"
-        value="[{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestDetail','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'name':'AddUser','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'}],'name':'ViewDLRequestLength','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'DL_No','type':'string'},{'name':'DL_Name','type':'string'},{'name':'DL_DOB','type':'string'},{'name':'DL_Hash','type':'bytes'},{'name':'DL_Address','type':'string'}],'name':'AddUserDL','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'viewUserDL','outputs':[{'name':'DL_No_S','type':'uint256'},{'name':'DL_No_V','type':'string'},{'name':'DL_Name_S','type':'uint256'},{'name':'DL_Name_V','type':'string'},{'name':'DL_DOB_S','type':'uint256'},{'name':'DL_DOB_V','type':'string'},{'name':'DL_Hash_S','type':'uint256'},{'name':'DL_Hash_V','type':'bytes'},{'name':'DL_Address_S','type':'uint256'},{'name':'DL_Address_V','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestHeader','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'UserIndex','type':'uint256'}],'name':'viewUser','outputs':[{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'UpdateRequestStatus','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'AddDLRequest','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'inputs':[],'payable':false,'stateMutability':'nonpayable','type':'constructor'}]"
-      />
     </form>
 
     <footer class="navbar-fixed-bottom">
@@ -259,15 +253,6 @@
     </footer>
 
     <script src="../public/js/buffer/buffer.js"></script>
-    <script
-      src="../public/js/ipfsapi/index.js"
-      integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="../public/js/jquery.js"></script>
-    <script src="../public/js/bootstrap.min.js"></script>
-    <script src="../public/js/sweet-alert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
+    <%- include('./Header'); %>
   </body>
 </html>
