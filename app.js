@@ -4,7 +4,8 @@ var path = require("path");
 var Web3 = require("web3");
 let fs = require("fs");
 let ipfs = require("ipfs-http-client");
-var app = express();
+var app = express()
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "web/views"));
@@ -22,9 +23,14 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let ipfsAdd = ipfs.create({host:"ipfs.infura.io", port:"5001"});
+//let ipfsAdd = ipfs.create({host:"ipfs.infura.io", port:"5001"});
+let ipfsAdd = ipfs.create({
+  host: "127.0.0.1",
+  port: "5001",
+  protocol: "http",
+});
 // Deploy Smart Contract and place smart contract address here
-var ContractAddress = "0x2736A4e2E9626EbE7CEf72f7D209cA7eC72AC774";
+var ContractAddress = "0xc66A68a262eaBC8B1D84419F9Adafa65b7da88a6";
 
 app.get("/", function (req, res) {
   res.render("index");
@@ -88,8 +94,9 @@ app.get("/Message", function (req, res) {
 
 app.get("/storefile", async function (req, res) {
   try {
-	// console.log("true")
+    // console.log("true")
     let data = fs.readFileSync("./web/public/img/coach.png");
+    console.log(data);
     let ipfsRes = await ipfsAdd.add({ fileName: "my.png", content: data });
     console.log(ipfsRes);
     res.send("hello");

@@ -198,7 +198,8 @@
       {
       	var InvoiceHash = document.getElementById("hdnDrivingLicenceHash").value;
           const ipfs = window.IpfsHttpClient.create({
-            host: "ipfs.infura.io",
+            //host: "ipfs.infura.io",
+            host:"localhost",
             port: "5001",
           });
           console.log(InvoiceHash);
@@ -319,7 +320,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-            <div class="footer-copyright">&copy; 2019 1ID</div>
+            <div class="footer-copyright">&copy; 2022 Mahesh Kutty</div>
           </div>
         </div>
       </div>

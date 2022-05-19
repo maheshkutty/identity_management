@@ -95,27 +95,32 @@
       }
 
       function getDLHash() {
-        const reader = new FileReader();
-        const invoicefile = document.getElementById("invoicefile");
-        reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
+        try {
+          // const reader = new FileReader();
+          // const invoicefile = document.getElementById("invoicefile");
+          // reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
 
-        reader.onloadend = async function () {
-          const ipfs = window.IpfsHttpClient.create({
-            host: "ipfs.infura.io",
-            port: "5001",
-          });
-          console.log(ipfs);
-          const buf = buffer.Buffer(reader.result); // Convert data into buffer
-          const res = await ipfs.add({
-            fileName: invoicefile.files[0].fileName,
-            content: buf,
-          });
-          console.log(res);
-          DL_Hash = res.path;
-          console.log(DL_Hash);
+          // reader.onloadend = async function () {
+          //   const ipfs = window.IpfsHttpClient.create({
+          //     //host: "ipfs.infura.io",
+          //     host: "127.0.0.1",
+          //     port: "5001",
+
+          //   });
+          //   console.log(ipfs);
+          //   const buf = buffer.Buffer(reader.result); // Convert data into buffer
+          //   const res = await ipfs.add({
+          //     fileName: invoicefile.files[0].fileName,
+          //     content: buf,
+          //   });
+          //   console.log(res);
+          //   DL_Hash = res.path;
+          //   console.log(DL_Hash);
           AddUserDL();
-        };
-        //AddUserDL();
+        } catch (error) {
+          console.log(error);
+          //AddUserDL();
+        }
       }
     </script>
   </head>
@@ -246,7 +251,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-            <div class="footer-copyright">&copy; 2019 Mahesh Kutty</div>
+            <div class="footer-copyright">&copy; 2022 Mahesh Kutty</div>
           </div>
         </div>
       </div>
